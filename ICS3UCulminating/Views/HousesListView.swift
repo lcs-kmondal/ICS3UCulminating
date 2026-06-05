@@ -23,8 +23,22 @@ struct HousesListView: View {
     // The "body" property defines the user interface for this app
     var body: some View {
         NavigationStack {
-            List(viewModel.housesList) { currentHouse in
-                HouseItemView(providedHouse: currentHouse)
+            List {
+                NavigationLink(destination: BattleshipGameView()) {
+                    HStack {
+                        Image(systemName: "target")
+                            .foregroundColor(.red)
+                        Text("Play Battleship")
+                            .font(.headline)
+                    }
+                    .padding(.vertical, 8)
+                }
+
+                Section("LCS Houses") {
+                    ForEach(viewModel.housesList) { currentHouse in
+                        HouseItemView(providedHouse: currentHouse)
+                    }
+                }
             }
             .navigationTitle("LCS Houses")
         }

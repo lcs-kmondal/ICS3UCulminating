@@ -9,22 +9,26 @@
 /* Begin PBXBuildFile section */
 		AB190CFC2FCDDE040018A267 /* ICS3UCulminatingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB190CFB2FCDDE040018A267 /* ICS3UCulminatingApp.swift */; };
 		AB190CFE2FCDDE040018A267 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB190CFD2FCDDE040018A267 /* Assets.xcassets */; };
-		AB190D012FCDDE040018A267 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB190D002FCDDE040018A267 /* House.swift */; };
-		AB190D042FCDDE040018A267 /* HouseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB190D032FCDDE040018A267 /* HouseListViewModel.swift */; };
-		AB190D072FCDDE040018A267 /* HousesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB190D062FCDDE040018A267 /* HousesListView.swift */; };
-		AB190D092FCDDE040018A267 /* HouseItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB190D082FCDDE040018A267 /* HouseItemView.swift */; };
 		AB190D0B2FCDDE040018A267 /* RELEASE.md in Resources */ = {isa = PBXBuildFile; fileRef = AB190D0A2FCDDE040018A267 /* RELEASE.md */; };
+		ABE8E5662FD1AFC000C4111A /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE8E5652FD1AFC000C4111A /* Coordinate.swift */; };
+		ABE8E5682FD1AFCC00C4111A /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE8E5672FD1AFCC00C4111A /* Ship.swift */; };
+		ABE8E56A2FD1AFD800C4111A /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE8E5692FD1AFD800C4111A /* Board.swift */; };
+		ABE8E56C2FD1AFE400C4111A /* BattleshipGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE8E56B2FD1AFE400C4111A /* BattleshipGame.swift */; };
+		ABE8E56E2FD1BB7600C4111A /* BattleshipBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE8E56D2FD1BB7600C4111A /* BattleshipBoardView.swift */; };
+		ABE8E5702FD1BB8600C4111A /* BattleshipGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE8E56F2FD1BB8600C4111A /* BattleshipGameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AB190CF82FCDDE040018A267 /* ICS3UCulminating.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ICS3UCulminating.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB190CFB2FCDDE040018A267 /* ICS3UCulminatingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICS3UCulminatingApp.swift; sourceTree = "<group>"; };
 		AB190CFD2FCDDE040018A267 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AB190D002FCDDE040018A267 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
-		AB190D032FCDDE040018A267 /* HouseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseListViewModel.swift; sourceTree = "<group>"; };
-		AB190D062FCDDE040018A267 /* HousesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HousesListView.swift; sourceTree = "<group>"; };
-		AB190D082FCDDE040018A267 /* HouseItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseItemView.swift; sourceTree = "<group>"; };
 		AB190D0A2FCDDE040018A267 /* RELEASE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RELEASE.md; sourceTree = "<group>"; };
+		ABE8E5652FD1AFC000C4111A /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
+		ABE8E5672FD1AFCC00C4111A /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
+		ABE8E5692FD1AFD800C4111A /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		ABE8E56B2FD1AFE400C4111A /* BattleshipGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipGame.swift; sourceTree = "<group>"; };
+		ABE8E56D2FD1BB7600C4111A /* BattleshipBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipBoardView.swift; sourceTree = "<group>"; };
+		ABE8E56F2FD1BB8600C4111A /* BattleshipGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipGameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +74,9 @@
 		AB190CFF2FCDDE040018A267 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				AB190D002FCDDE040018A267 /* House.swift */,
+				ABE8E5652FD1AFC000C4111A /* Coordinate.swift */,
+				ABE8E5672FD1AFCC00C4111A /* Ship.swift */,
+				ABE8E5692FD1AFD800C4111A /* Board.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -78,7 +84,7 @@
 		AB190D022FCDDE040018A267 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				AB190D032FCDDE040018A267 /* HouseListViewModel.swift */,
+				ABE8E56B2FD1AFE400C4111A /* BattleshipGame.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -86,8 +92,8 @@
 		AB190D052FCDDE040018A267 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AB190D062FCDDE040018A267 /* HousesListView.swift */,
-				AB190D082FCDDE040018A267 /* HouseItemView.swift */,
+				ABE8E56D2FD1BB7600C4111A /* BattleshipBoardView.swift */,
+				ABE8E56F2FD1BB8600C4111A /* BattleshipGameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -165,11 +171,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB190D092FCDDE040018A267 /* HouseItemView.swift in Sources */,
-				AB190D012FCDDE040018A267 /* House.swift in Sources */,
-				AB190D072FCDDE040018A267 /* HousesListView.swift in Sources */,
-				AB190D042FCDDE040018A267 /* HouseListViewModel.swift in Sources */,
+				ABE8E56C2FD1AFE400C4111A /* BattleshipGame.swift in Sources */,
 				AB190CFC2FCDDE040018A267 /* ICS3UCulminatingApp.swift in Sources */,
+				ABE8E5702FD1BB8600C4111A /* BattleshipGameView.swift in Sources */,
+				ABE8E5682FD1AFCC00C4111A /* Ship.swift in Sources */,
+				ABE8E56A2FD1AFD800C4111A /* Board.swift in Sources */,
+				ABE8E5662FD1AFC000C4111A /* Coordinate.swift in Sources */,
+				ABE8E56E2FD1BB7600C4111A /* BattleshipBoardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

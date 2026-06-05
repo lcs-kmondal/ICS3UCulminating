@@ -1,0 +1,199 @@
+//
+//  BattleshipGameView.swift
+//  ICS3UCulminating
+//
+
+import SwiftUI
+
+struct BattleshipGameView: View {
+    
+    // MARK: - Stored properties
+    @State private var viewModel = BattleshipGame()
+    @State private var selectedShipType: ShipType? = .carrier
+    @State private var isVertical: Bool = true
+    
+    // MARK: - Body
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("Battleship")
+                    .font(.largeTitle.bold())
+                    .padding(.top)
+                
+                if viewModel.phase == .setup {
+                    setupView
+                } else if viewModel.phase == .playing {
+                    gameplayView
+                } else {
+                    gameOverView
+                }
+                
+                Spacer()
+            }
+            .padding()
+        }
+        .navigationTitle("Game")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    // MARK: - Setup View
+    private var setupView: some View {
+        VStack(spacing: 20) {
+            Text("Place Your Ships")
+                .font(.title2)
+            
+            BattleshipBoardView(
+                board: viewModel.playerBoard,
+                title: "Your Board",
+                isInteractive: true,
+                onCellTap: handlePlacement
+            )
+            
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Select Ship to Place:")
+                    .font(.headline)
+                
+                HStack {
+                    ForEach(ShipType.allCases, id: \.self) { type in
+                        Button(action: {
+                            selectedShipType = type
+                        }) {
+                            Text(type.rawValue.prefix(1))
+                                .frame(width: 40, height: 40)
+                                .background(selectedShipType == type ? Color.blue : Color.gray.opacity(0.3))
+                                .foregroundColor(selectedShipType == type ? .white : .primary)
+                                .clipShape(Circle())
+                        }
+                    }
+                }
+                
+                Toggle("Vertical Placement", isOn: $isVertical)
+                    .padding(.top, 5)
+                
+                Text("Ships placed: \(viewModel.playerBoard.ships.count)/5")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(12)
+            
+            Button(action: {
+                viewModel.startGame()
+            }) {
+                Text("Start Game")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(viewModel.playerBoard.ships.count == 5 ? Color.green : Color.gray)
+                    .cornerRadius(12)
+            }
+            .disabled(viewModel.playerBoard.ships.count < 5)
+        }
+    }
+    
+    // MARK: - Gameplay View
+    private var gameplayView: some View {
+        VStack(spacing: 30) {
+            Text(viewModel.isPlayerTurn ? "Your Turn - Fire!" : "Computer's Turn...")
+                .font(.title2)
+                .foregroundColor(viewModel.isPlayerTurn ? .blue : .red)
+            
+            BattleshipBoardView(
+                board: viewModel.computerBoard,
+                title: "Target Grid (Opponent)",
+                isInteractive: viewModel.isPlayerTurn,
+                onCellTap: handleFiring
+            )
+            
+            BattleshipBoardView(
+                board: viewModel.playerBoard,
+                title: "Your Fleet",
+                isInteractive: false,
+                onCellTap: { _ in }
+            )
+        }
+    }
+    
+    // MARK: - Game Over View
+    private var gameOverView: some View {
+        VStack(spacing: 20) {
+            Text("Game Over")
+                .font(.largeTitle)
+            
+            Text(viewModel.winner == "Player" ? "You Won! 🎉" : "Computer Won! 🤖")
+                .font(.title)
+                .foregroundColor(viewModel.winner == "Player" ? .green : .red)
+            
+            Button(action: {
+                viewModel.reset()
+            }) {
+                Text("Play Again")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(12)
+            }
+        }
+        .padding()
+    }
+    
+    // MARK: - Functions
+    
+    private func handlePlacement(at coordinate: Coordinate) {
+        guard let type = selectedShipType else { return }
+        
+        // Check if ship of this type is already placed
+        var alreadyPlaced = false
+        for ship in viewModel.playerBoard.ships {
+            if ship.type == type {
+                alreadyPlaced = true
+                break
+            }
+        }
+        
+        if alreadyPlaced {
+            // Option: remove old one or just return
+            return
+        }
+        
+        if viewModel.playerBoard.canPlaceShip(type: type, at: coordinate, isVertical: isVertical) {
+            viewModel.playerBoard.placeShip(type: type, at: coordinate, isVertical: isVertical)
+            
+            // Auto-select next ship type if available
+            selectNextShipType()
+        }
+    }
+    
+    private func selectNextShipType() {
+        let allTypes = ShipType.allCases
+        for type in allTypes {
+            var placed = false
+            for ship in viewModel.playerBoard.ships {
+                if ship.type == type {
+                    placed = true
+                    break
+                }
+            }
+            if !placed {
+                selectedShipType = type
+                return
+            }
+        }
+        selectedShipType = nil
+    }
+    
+    private func handleFiring(at coordinate: Coordinate) {
+        viewModel.playerFire(at: coordinate)
+        
+        if !viewModel.isPlayerTurn && viewModel.phase == .playing {
+            // Trigger computer turn with a slight delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                viewModel.computerFire()
+            }
+        }
+    }
+}
