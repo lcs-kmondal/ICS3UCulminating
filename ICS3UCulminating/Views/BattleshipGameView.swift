@@ -42,42 +42,6 @@ struct BattleshipGameView: View {
             Text("Place Your Ships")
                 .font(.title2)
             
-            BattleshipBoardView(
-                board: viewModel.playerBoard,
-                title: "Your Board",
-                isInteractive: true,
-                onCellTap: handlePlacement
-            )
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Select Ship to Place:")
-                    .font(.headline)
-                
-                HStack {
-                    ForEach(ShipType.allCases, id: \.self) { type in
-                        Button(action: {
-                            selectedShipType = type
-                        }) {
-                            Text(type.rawValue.prefix(1))
-                                .frame(width: 40, height: 40)
-                                .background(selectedShipType == type ? Color.blue : Color.gray.opacity(0.3))
-                                .foregroundColor(selectedShipType == type ? .white : .primary)
-                                .clipShape(Circle())
-                        }
-                    }
-                }
-                
-                Toggle("Vertical Placement", isOn: $isVertical)
-                    .padding(.top, 5)
-                
-                Text("Ships placed: \(viewModel.playerBoard.ships.count)/5")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding()
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(12)
-            
             Button(action: {
                 viewModel.startGame()
             }) {
@@ -90,6 +54,58 @@ struct BattleshipGameView: View {
                     .cornerRadius(12)
             }
             .disabled(viewModel.playerBoard.ships.count < 5)
+            
+            BattleshipBoardView(
+                board: viewModel.playerBoard,
+                title: "Your Board",
+                isInteractive: true,
+                onCellTap: handlePlacement
+            )
+            
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Boat Legend & Selection:")
+                    .font(.headline)
+                
+                ForEach(ShipType.allCases, id: \.self) { type in
+                    Button(action: {
+                        selectedShipType = type
+                    }) {
+                        HStack {
+                            Text(type.rawValue)
+                                .frame(width: 100, alignment: .leading)
+                            
+                            HStack(spacing: 2) {
+                                ForEach(0..<type.length, id: \.self) { _ in
+                                    Rectangle()
+                                        .fill(selectedShipType == type ? Color.blue : Color.gray.opacity(0.5))
+                                        .frame(width: 20, height: 20)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            Text("\(type.length) cells")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                            if viewModel.playerBoard.ships.contains(where: { $0.type == type }) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                            }
+                        }
+                        .padding(8)
+                        .background(selectedShipType == type ? Color.blue.opacity(0.1) : Color.clear)
+                        .cornerRadius(8)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                
+                Toggle("Vertical Placement", isOn: $isVertical)
+                    .padding(.top, 5)
+            }
+            .padding()
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(12)
         }
     }
     

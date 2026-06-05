@@ -20,26 +20,9 @@ struct BattleshipBoardView: View {
                 .font(.headline)
             
             VStack(spacing: 2) {
-                // Header row (numbers 1-10)
-                HStack(spacing: 2) {
-                    Spacer().frame(width: 25)
-                    ForEach(1...10, id: \.self) { i in
-                        Text("\(i)")
-                            .frame(width: 30, height: 30)
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
                 // Grid rows
                 ForEach(0..<10, id: \.self) { row in
                     HStack(spacing: 2) {
-                        // Label (A-J)
-                        Text(String(UnicodeScalar(65 + row)!))
-                            .frame(width: 25, height: 30)
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        
                         ForEach(0..<10, id: \.self) { col in
                             CellView(
                                 state: board.grid[row][col],
@@ -82,22 +65,20 @@ struct CellView: View {
                 Circle()
                     .fill(Color.white)
                     .frame(width: 10, height: 10)
-            } else if hasShip && !isInteractive {
-                // Only show ships on the player's own board (where interaction is usually disabled for the board itself during firing)
-                // Or if we want to show ships during placement
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.gray)
-                    .padding(4)
             }
         }
     }
     
     private var backgroundColor: Color {
+        if hasShip && (state == .empty || state == .hit) {
+            return Color.gray.opacity(0.8)
+        }
+        
         switch state {
         case .empty:
             return Color.blue.opacity(0.1)
         case .hit:
-            return Color.blue.opacity(0.2)
+            return Color.red.opacity(0.3)
         case .miss:
             return Color.blue.opacity(0.05)
         }
