@@ -35,6 +35,29 @@ class Board {
     
     // MARK: - Functions
     
+    // Check if a coordinate is occupied by a ship and return that ship if it exists
+    func shipAt(at coordinate: Coordinate) -> Ship? {
+        for ship in ships {
+            for shipCoord in ship.coordinates {
+                if shipCoord == coordinate {
+                    return ship
+                }
+            }
+        }
+        return nil
+    }
+    
+    // Remove a ship from the board
+    func removeShip(_ shipToRemove: Ship) {
+        var remainingShips: [Ship] = []
+        for ship in ships {
+            if ship.id != shipToRemove.id {
+                remainingShips.append(ship)
+            }
+        }
+        self.ships = remainingShips
+    }
+    
     // Attempt to place a ship on the board
     func canPlaceShip(type: ShipType, at start: Coordinate, isVertical: Bool) -> Bool {
         let length = type.length

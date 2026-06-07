@@ -40,6 +40,10 @@ struct BattleshipGameView: View {
             Text("Place Your Ships")
                 .font(.headline)
             
+            Text("Tap a ship to move or rotate it")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
             Button(action: {
                 viewModel.startGame()
             }) {
@@ -162,6 +166,13 @@ struct BattleshipGameView: View {
     // MARK: - Functions
     
     private func handlePlacement(at coordinate: Coordinate) {
+        // If there's a ship at this coordinate, pick it up (remove it and make it the selected type)
+        if let shipAtCoord = viewModel.playerBoard.shipAt(at: coordinate) {
+            selectedShipType = shipAtCoord.type
+            viewModel.playerBoard.removeShip(shipAtCoord)
+            return
+        }
+        
         guard let type = selectedShipType else { return }
         
         // Check if ship of this type is already placed
