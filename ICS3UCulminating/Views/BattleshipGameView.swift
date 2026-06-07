@@ -14,22 +14,48 @@ struct BattleshipGameView: View {
     
     // MARK: - Body
     var body: some View {
-        ScrollView {
-            VStack(spacing: 10) {
-                Text("Battleship")
-                    .font(.title.bold())
-                    .padding(.top)
-                
-                if viewModel.phase == .setup {
-                    setupView
-                } else if viewModel.phase == .playing {
-                    gameplayView
-                } else {
-                    gameOverView
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+                .opacity(0.05)
+            
+            ScrollView {
+                VStack(spacing: viewModel.phase == .playing ? 5 : 15) {
+                    if viewModel.phase != .playing {
+                        Text("Battleship")
+                            .font(.title.bold())
+                            .padding(.top)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.blue, .purple],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                    }
+                    
+                    Group {
+                        if viewModel.phase == .setup {
+                            setupView
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                ))
+                        } else if viewModel.phase == .playing {
+                            gameplayView
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                ))
+                        } else {
+                            gameOverView
+                                .transition(.opacity.combined(with: .scale))
+                        }
+                    }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
         }
+        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: viewModel.phase)
         .navigationTitle("Game")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -45,15 +71,23 @@ struct BattleshipGameView: View {
                 .foregroundColor(.secondary)
             
             Button(action: {
-                viewModel.startGame()
+                withAnimation(.spring()) {
+                    viewModel.startGame()
+                }
             }) {
-                Text("Start Game")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(10)
-                    .background(viewModel.playerBoard.ships.count == 5 ? Color.green : Color.gray)
-                    .cornerRadius(12)
+                HStack {
+                    Text("Start Game")
+                        .font(.headline)
+                    Image(systemName: "play.fill")
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(viewModel.playerBoard.ships.count == 5 ? Color.blue : Color.gray)
+                        .shadow(color: viewModel.playerBoard.ships.count == 5 ? .blue.opacity(0.3) : .clear, radius: 5, x: 0, y: 3)
+                )
             }
             .disabled(viewModel.playerBoard.ships.count < 5)
             
@@ -118,18 +152,28 @@ struct BattleshipGameView: View {
     
     // MARK: - Gameplay View
     private var gameplayView: some View {
-        VStack(spacing: 30) {
-            Text(viewModel.isPlayerTurn ? "Your Turn - Fire!" : "Computer's Turn...")
-                .font(.title2)
-                .foregroundColor(viewModel.isPlayerTurn ? .blue : .red)
+        VStack(spacing: 12) {
+            VStack(spacing: 2) {
+                Text(viewModel.isPlayerTurn ? "Your Turn" : "Computer's Turn")
+                    .font(.headline)
+                    .foregroundColor(viewModel.isPlayerTurn ? .blue : .red)
+                
+                Text(viewModel.isPlayerTurn ? "Tap the grid to fire" : "Waiting for opponent...")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             
             BattleshipBoardView(
                 board: viewModel.computerBoard,
-                title: "Target Grid (Opponent)",
+                title: "Target Grid",
                 isInteractive: viewModel.isPlayerTurn,
                 showShips: false,
                 onCellTap: handleFiring
             )
+            .shadow(color: viewModel.isPlayerTurn ? .blue.opacity(0.1) : .clear, radius: 5)
+            
+            Divider()
+                .padding(.horizontal, 60)
             
             BattleshipBoardView(
                 board: viewModel.playerBoard,
@@ -138,6 +182,8 @@ struct BattleshipGameView: View {
                 showShips: true,
                 onCellTap: { _ in }
             )
+            .opacity(viewModel.isPlayerTurn ? 1.0 : 0.8)
+            .scaleEffect(viewModel.isPlayerTurn ? 1.0 : 0.95)
         }
     }
     

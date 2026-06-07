@@ -29,9 +29,9 @@ struct BattleshipBoardView: View {
     
     // MARK: - Body
     var body: some View {
-        VStack {
+        VStack(spacing: 4) {
             Text(title)
-                .font(.headline)
+                .font(.subheadline.bold())
             
             VStack(spacing: 2) {
                 // Grid rows
