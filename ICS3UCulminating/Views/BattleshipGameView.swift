@@ -15,9 +15,9 @@ struct BattleshipGameView: View {
     // MARK: - Body
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 Text("Battleship")
-                    .font(.largeTitle.bold())
+                    .font(.title.bold())
                     .padding(.top)
                 
                 if viewModel.phase == .setup {
@@ -27,10 +27,8 @@ struct BattleshipGameView: View {
                 } else {
                     gameOverView
                 }
-                
-                Spacer()
             }
-            .padding()
+            .padding(.horizontal)
         }
         .navigationTitle("Game")
         .navigationBarTitleDisplayMode(.inline)
@@ -38,9 +36,9 @@ struct BattleshipGameView: View {
     
     // MARK: - Setup View
     private var setupView: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 10) {
             Text("Place Your Ships")
-                .font(.title2)
+                .font(.headline)
             
             Button(action: {
                 viewModel.startGame()
@@ -49,7 +47,7 @@ struct BattleshipGameView: View {
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .padding()
+                    .padding(10)
                     .background(viewModel.playerBoard.ships.count == 5 ? Color.green : Color.gray)
                     .cornerRadius(12)
             }
@@ -62,9 +60,16 @@ struct BattleshipGameView: View {
                 onCellTap: handlePlacement
             )
             
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Boat Legend & Selection:")
-                    .font(.headline)
+            VStack(alignment: .leading, spacing: 5) {
+                HStack {
+                    Text("Boat Legend & Selection:")
+                        .font(.headline)
+                    Spacer()
+                    Toggle("Vertical", isOn: $isVertical)
+                        .labelsHidden()
+                    Text("Vertical")
+                        .font(.caption)
+                }
                 
                 ForEach(ShipType.allCases, id: \.self) { type in
                     Button(action: {
@@ -72,13 +77,13 @@ struct BattleshipGameView: View {
                     }) {
                         HStack {
                             Text(type.rawValue)
-                                .frame(width: 100, alignment: .leading)
+                                .frame(width: 80, alignment: .leading)
                             
                             HStack(spacing: 2) {
                                 ForEach(0..<type.length, id: \.self) { _ in
                                     Rectangle()
                                         .fill(selectedShipType == type ? Color.blue : Color.gray.opacity(0.5))
-                                        .frame(width: 20, height: 20)
+                                        .frame(width: 15, height: 15)
                                 }
                             }
                             
@@ -93,17 +98,14 @@ struct BattleshipGameView: View {
                                     .foregroundColor(.green)
                             }
                         }
-                        .padding(8)
+                        .padding(4)
                         .background(selectedShipType == type ? Color.blue.opacity(0.1) : Color.clear)
                         .cornerRadius(8)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                
-                Toggle("Vertical Placement", isOn: $isVertical)
-                    .padding(.top, 5)
             }
-            .padding()
+            .padding(10)
             .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
         }

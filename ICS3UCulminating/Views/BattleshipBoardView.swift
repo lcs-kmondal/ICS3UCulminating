@@ -54,17 +54,17 @@ struct CellView: View {
         ZStack {
             Rectangle()
                 .fill(backgroundColor)
-                .frame(width: 30, height: 30)
+                .frame(width: 25, height: 25)
                 .border(Color.blue.opacity(0.2), width: 0.5)
             
             if state == .hit {
                 Circle()
                     .fill(Color.red)
-                    .frame(width: 15, height: 15)
+                    .frame(width: 12, height: 12)
             } else if state == .miss {
                 Circle()
                     .fill(Color.white)
-                    .frame(width: 10, height: 10)
+                    .frame(width: 8, height: 8)
             }
         }
     }
