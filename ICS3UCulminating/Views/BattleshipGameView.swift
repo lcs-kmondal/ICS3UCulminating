@@ -61,6 +61,7 @@ struct BattleshipGameView: View {
                 board: viewModel.playerBoard,
                 title: "Your Board",
                 isInteractive: true,
+                showShips: true,
                 onCellTap: handlePlacement
             )
             
@@ -126,6 +127,7 @@ struct BattleshipGameView: View {
                 board: viewModel.computerBoard,
                 title: "Target Grid (Opponent)",
                 isInteractive: viewModel.isPlayerTurn,
+                showShips: false,
                 onCellTap: handleFiring
             )
             
@@ -133,6 +135,7 @@ struct BattleshipGameView: View {
                 board: viewModel.playerBoard,
                 title: "Your Fleet",
                 isInteractive: false,
+                showShips: true,
                 onCellTap: { _ in }
             )
         }
@@ -147,6 +150,14 @@ struct BattleshipGameView: View {
             Text(viewModel.winner == "Player" ? "You Won! 🎉" : "Computer Won! 🤖")
                 .font(.title)
                 .foregroundColor(viewModel.winner == "Player" ? .green : .red)
+            
+            BattleshipBoardView(
+                board: viewModel.computerBoard,
+                title: "Opponent's Fleet Revealed",
+                isInteractive: false,
+                showShips: true,
+                onCellTap: { _ in }
+            )
             
             Button(action: {
                 viewModel.reset()

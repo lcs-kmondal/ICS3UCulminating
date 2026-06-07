@@ -11,7 +11,21 @@ struct BattleshipBoardView: View {
     var board: Board
     let title: String
     let isInteractive: Bool
+    let showShips: Bool
     let onCellTap: (Coordinate) -> Void
+    
+    // MARK: - Initializer
+    init(board: Board, 
+         title: String, 
+         isInteractive: Bool, 
+         showShips: Bool = true, 
+         onCellTap: @escaping (Coordinate) -> Void) {
+        self.board = board
+        self.title = title
+        self.isInteractive = isInteractive
+        self.showShips = showShips
+        self.onCellTap = onCellTap
+    }
     
     // MARK: - Body
     var body: some View {
@@ -27,7 +41,8 @@ struct BattleshipBoardView: View {
                             CellView(
                                 state: board.grid[row][col],
                                 hasShip: board.isOccupied(at: Coordinate(row: row, column: col)),
-                                isInteractive: isInteractive
+                                isInteractive: isInteractive,
+                                showShips: showShips
                             )
                             .onTapGesture {
                                 if isInteractive {
@@ -49,6 +64,7 @@ struct CellView: View {
     let state: CellState
     let hasShip: Bool
     let isInteractive: Bool
+    let showShips: Bool
     
     var body: some View {
         ZStack {
@@ -58,19 +74,24 @@ struct CellView: View {
                 .border(Color.blue.opacity(0.2), width: 0.5)
             
             if state == .hit {
-                Circle()
-                    .fill(Color.red)
-                    .frame(width: 12, height: 12)
+                Image(systemName: "xmark")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 15, height: 15)
+                    .foregroundColor(.red)
+                    .fontWeight(.bold)
             } else if state == .miss {
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: 8, height: 8)
+                Image(systemName: "xmark")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 12, height: 12)
+                    .foregroundColor(.gray)
             }
         }
     }
     
     private var backgroundColor: Color {
-        if hasShip && (state == .empty || state == .hit) {
+        if showShips && hasShip && (state == .empty || state == .hit) {
             return Color.gray.opacity(0.8)
         }
         
@@ -78,7 +99,7 @@ struct CellView: View {
         case .empty:
             return Color.blue.opacity(0.1)
         case .hit:
-            return Color.red.opacity(0.3)
+            return Color.red.opacity(0.1)
         case .miss:
             return Color.blue.opacity(0.05)
         }
