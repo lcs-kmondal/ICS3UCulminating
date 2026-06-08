@@ -205,16 +205,27 @@ struct BattleshipGameView: View {
                 onCellTap: { _ in }
             )
             
-            Button(action: {
-                viewModel.reset()
-            }) {
-                Text("Play Again")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
+            HStack(spacing: 15) {
+                if let jsonURL = viewModel.getJSONURL() {
+                    ShareLink("Export JSON", item: jsonURL)
+                        .font(.headline)
+                        .padding()
+                        .background(Color.purple)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+                
+                Button(action: {
+                    viewModel.reset()
+                }) {
+                    Text("Play Again")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                }
             }
         }
         .padding()

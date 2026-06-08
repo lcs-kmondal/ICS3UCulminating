@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum CellState {
+enum CellState: String, Codable {
     case empty
     case miss
     case hit

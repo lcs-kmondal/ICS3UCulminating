@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum ShipType: String, CaseIterable {
+enum ShipType: String, CaseIterable, Codable {
     case carrier = "Carrier"
     case battleship = "Battleship"
     case cruiser = "Cruiser"
@@ -23,7 +23,7 @@ enum ShipType: String, CaseIterable {
     }
 }
 
-struct Ship: Identifiable {
+struct Ship: Identifiable, Codable {
     
     // MARK: - Stored properties
     let id = UUID()

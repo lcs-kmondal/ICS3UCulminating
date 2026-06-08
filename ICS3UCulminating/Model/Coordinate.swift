@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct Coordinate: Equatable, Hashable {
+struct Coordinate: Equatable, Hashable, Codable {
     
     // MARK: - Stored properties
     let row: Int

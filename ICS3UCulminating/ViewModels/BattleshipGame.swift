@@ -169,4 +169,65 @@ class BattleshipGame {
         aiTargetQueue = []
         autoSetupComputerBoard()
     }
+    
+    // MARK: - Export Logic
+    
+    struct BoardExport: Codable {
+        let title: String
+        let date: Date
+        let visualGrid: [String]
+        let grid: [[CellState]]
+        let ships: [Ship]
+    }
+    
+    func generateBoardJSON() -> Data? {
+        // Create a visual string representation of the grid
+        var visual: [String] = []
+        for row in 0..<10 {
+            var rowString = ""
+            for col in 0..<10 {
+                let state = computerBoard.grid[row][col]
+                let isOccupied = computerBoard.isOccupied(at: Coordinate(row: row, column: col))
+                
+                switch state {
+                case .hit: rowString += "X "
+                case .miss: rowString += "M "
+                case .empty:
+                    rowString += isOccupied ? "S " : "~ "
+                }
+            }
+            visual.append(rowString.trimmingCharacters(in: .whitespaces))
+        }
+        
+        let export = BoardExport(
+            title: "Opponent's Grid (Final State)",
+            date: Date(),
+            visualGrid: visual,
+            grid: computerBoard.grid,
+            ships: computerBoard.ships
+        )
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        do {
+            return try encoder.encode(export)
+        } catch {
+            print("Failed to encode board: \(error)")
+            return nil
+        }
+    }
+    
+    func getJSONURL() -> URL? {
+        guard let data = generateBoardJSON() else { return nil }
+        let tempDir = FileManager.default.temporaryDirectory
+        let fileURL = tempDir.appendingPathComponent("BattleshipResult.json")
+        do {
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            print("Failed to write JSON to temp file: \(error)")
+            return nil
+        }
+    }
 }
